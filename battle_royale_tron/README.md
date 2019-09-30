@@ -1,17 +1,48 @@
-# Tron-Pygame
-A clone of the game *Tron* using Python and Pygame
+# Battle_royale_tron
+トロンゲーム
+## ルール
+このゲームは４人のアルゴリズムを競わせるゲームです  
+壁、またはプレイヤーの通ったマスに入ってしまうと脱落です  
+脱落したプレイヤーの描いたマスは勝敗が決まるまで残ります  
+生存者が１になると、生存プレイヤーに１点が入ります  
+３点先取したプレイヤーが、ゲームの勝者です  
+## 設定
+||||
+|:---|:---|:---|
+|プレイヤーサイズ| 20×20 | P |
+|マップサイズ| 700×700 | w,h |
+|1Pのアルゴリズム|momotaro.py|mom.turn|
+|2Pのアルゴリズム|kintaro.py|kin.turn|
+|3Pのアルゴリズム|urashima.py|ura.turn|
+|4Pのアルゴリズム|yasha.py|yas.turn|
 
-## Controls
+## 実行環境
+ubuntu16.04LTS  
+python3系  
+numpy  
+pygame  
 
- - Player One:
-   - Up: W  
-   - Down: S  
-   - Left: A  
-   - Right: D  
-   - Boost: TAB  
- - Player Two:
-   - Up: Up Arrow  
-   - Down: Down Arrow  
-   - Left: Left Arrow  
-   - Right: Right Arrow  
-   - Boost: Right Shift  
+### numpyのインストール
+`$ pip install numpy`
+### pygameのインストール
+`$ pip install pygame`
+
+## 各プログラムの説明
+- battle_royale.py  
+対戦に使用するプログラムです  
+`$ python3 battle_royale.py`でゲームが起動します  
+編集可の部分以外はできるだけ変更しないでください  
+- momotaro.py  
+1Pのアルゴリズムを記述するプログラムです  
+デフォルトでは前方に壁があると右に進路を変えるアルゴリズムが組んであります  
+- kintaro.py  
+2Pのアルゴリズムを記述するプログラムです  
+デフォルトでは前方に壁があると右に進路を変えるアルゴリズムが組んであります  
+- urashima.py  
+3Pのアルゴリズムを記述するプログラムです  
+デフォルトでは前方に壁があると右に進路を変えるアルゴリズムが組んであります  
+- momotaro.py  
+4Pのアルゴリズムを記述するプログラムです  
+デフォルトでは前方に壁があると"左"に進路を変えるアルゴリズムが組んであります  
+ 
+
