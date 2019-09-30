@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#https://github.com/stanley-godfrey/Tron-pg
 '''
     4-player tron battle
 “The strong one doesn't win, the one that wins is strong.”
@@ -24,20 +25,20 @@ MUSIC     = './music/steamboat_willie.mp3'              # ステージ音楽(Kin
 #------------------------------------------------------------------------------------------------#
 class Player:               #プレイヤー設定
     def __init__(self, x, y, direction, color,number):
-        self.x         = x                              # プレイヤー座標　X
-        self.y         = y                              # プレイヤー座標　Y
-        self.direction = direction                      # プレイヤー進行方向[x,y]
-        self.color     = color                          # プレイヤー色
-        self.number    = number                         # プレイヤー番号
-        self.rect      = pg.Rect(self.x, self.y, P, P)  # プレイヤーオブジェクト(left,top,width,height)
+        self.x       = x                                # プレイヤー座標　X
+        self.y       = y                                # プレイヤー座標　Y
+        self.bearing = direction                        # プレイヤー進行方向[x,y]
+        self.color   = color                            # プレイヤー色
+        self.number  = number                           # プレイヤー番号
+        self.rect    = pg.Rect(self.x, self.y, P, P)    # プレイヤーオブジェクト(left,top,width,height)
     
     def __draw__(self):     # マス塗りメソッド
         self.rect    = pg.Rect(self.x, self.y, P, P)    # プレイヤーオブジェクト
         pg.draw.rect(screen, self.color, self.rect, 1)  # プレイヤーのマスを塗る
     
     def __move__(self):     # マス移動メソッド
-        self.x      += self.direction[0]                #X軸方向
-        self.y      += self.direction[1]                #Y軸方向
+        self.x      += self.bearing[0]                  #X軸方向
+        self.y      += self.bearing[1]                  #Y軸方向
 
 def new_game():             # New_Gameメソッド
     if     dead[0]:
@@ -72,7 +73,7 @@ SET         = 3                                          # 勝利に必要なセ
 
 clock       = pg.time.Clock()                            # used to regulate FPS
 check_time  = time.time()                                # used to check collisions with rects
-start_c     = np.array(range(2*P, w-2*P, P))             # 開始座標リスト[20, 60, ...,360,380]
+start_c     = np.array(range(2*P, w-2*P, P))             # 開始座標リスト[40, 60, ...,360,380]
 start_d     = [(0, -P), (-P, 0), (P, 0), (0, P)]         # 開始方向 [↑, ←, →, ↓]
 dead        = [True, True, True, True]                   # 死んだプレイヤーの情報　[True:生存, False:死亡]
 survivor    = np.sum(dead)                               # 生存プレイヤー数
@@ -85,12 +86,11 @@ p4 = Player(rd.choice(start_c), rd.choice(start_c) ,rd.choice(start_d), P4_COLOR
 
 objects     = list([p1, p2, p3, p4])                     # プレイヤー情報
 all_cell    = list()                                     # セル情報
-wall_cell   = list()
-wall        = list([pg.Rect(0,0,P,h), pg.Rect(0,0,w,P), pg.Rect(w-P,0,P,h), pg.Rect(0,h-P,w,P)]) # 外壁情報  
-mom  = momotaro.Momotaro()
-kin  = kintaro.Kintaro()
-ura  = urashima.Urashima()
-yas  = yasha.Yasha()   
+wall        = list([pg.Rect(0,0,P,h), pg.Rect(0,0,w,P), pg.Rect(w-P,0,P,h), pg.Rect(0,h-P,w,P)]) # 外壁情報     
+momotaro.momotaro()                                      # プレイヤー1のアルゴリズム
+kintaro.kintaro()                                        # プレイヤー2のアルゴリズム
+urashima.urashima()                                      # プレイヤー3のアルゴリズム
+yasha.yasha()                                            # プレイヤー4のアルゴリズム
 
 done = True            
 new  = True
@@ -102,17 +102,11 @@ while  done:
     for o in objects: #プレイヤーの行動結果
         if not dead[o.number-1]: continue                       #死亡済みプレイヤーはスキップ    
         o.__draw__() # 現在位置描画
-
-        # アルゴリズム部分(ここは引数とか編集してもいいよ)---------------------------------#
-
-        if   o.number == 1: o.direction = mom.turn(P, o.x, o.y, o.direction, wall_cell, wall)
-        elif o.number == 2: o.direction = kin.turn(P, o.x, o.y, o.direction, wall_cell, wall)
-        elif o.number == 3: o.direction = ura.turn(P, o.x, o.y, o.direction, wall_cell, wall)
-        else:               o.direction = yas.turn(P, o.x, o.y, o.direction, wall_cell, wall)
-        # ここまで編集可-------------------------------------------------------------------#
-
+        # アルゴリズム記述-----------------------------------------------------------------#
+        #momotaro.momotaro
+        #----------------------------------------------------------------------------------#
         o.__move__() # １ターン移動
-        #衝突判定--------------------------------------------------------------------------#      
+        #衝突判定------------------------------------------------------------------------------#      
         if (o.rect,'1') in all_cell or (o.rect,'2') in all_cell or (o.rect,'3') in all_cell \
                  or (o.rect,'4') in all_cell or o.rect.collidelist(wall) != -1:                #衝突した時
             if (time.time() - check_time) >= 0.1:
@@ -134,7 +128,6 @@ while  done:
                     new_p1, new_p2, new_p3, new_p4 = new_game()
                     objects       = list([new_p1, new_p2, new_p3, new_p4])
                     all_cell      = list([(p1.rect,'1'), (p2.rect,'2'), (p3.rect,'3'), (p4.rect,'4')])
-                    wall_cell     = list([p1.rect, p2.rect, p3.rect, p4.rect])
                     dead          = [True, True, True, True] 
                     print('===================================')  
         
@@ -143,8 +136,7 @@ while  done:
             elif o.color == P2_COLOR: all_cell.append((o.rect,'2'))
             elif o.color == P3_COLOR: all_cell.append((o.rect,'3'))
             elif o.color == P4_COLOR: all_cell.append((o.rect,'4'))
-            wall_cell.append(o.rect)
-        pg.time.delay(200)
+        pg.time.delay(100)
     #--------------------------------------------------------------------------------------------#
     for r in all_cell: #全セル描画
         if new is False:  # new_game時にセル情報を空にする
@@ -155,7 +147,7 @@ while  done:
         elif r[1] == '2': pg.draw.rect(screen, P2_COLOR, r[0], 1) if dead[1] else pg.draw.rect(screen, WHITE, r[0], 0)
         elif r[1] == '3': pg.draw.rect(screen, P3_COLOR, r[0], 1) if dead[2] else pg.draw.rect(screen, WHITE, r[0], 0)
         elif r[1] == '4': pg.draw.rect(screen, P4_COLOR, r[0], 1) if dead[3] else pg.draw.rect(screen, WHITE, r[0], 0)
-    pg.time.delay(60)
+    pg.time.delay(120)
 
     # 現在のスコアを表示
     score_font = pg.font.Font(None, 72) 
