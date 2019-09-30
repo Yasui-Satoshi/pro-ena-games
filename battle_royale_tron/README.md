@@ -1,5 +1,6 @@
 # Battle_royale_tron
 トロンゲーム
+![Ena_Ken_Games](https://user-images.githubusercontent.com/39481709/65900245-82f10300-e3f0-11e9-9081-f09b8acbee25.jpg)
 ## ルール
 このゲームは４人のアルゴリズムを競わせるゲームです  
 壁、またはプレイヤーの通ったマスに入ってしまうと脱落です  
